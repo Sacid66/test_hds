@@ -34,16 +34,12 @@ def check_hadis():
                     "role": "system",
                     "content": (
                         "Sen bir İslam hadisi doğrulama sistemisin. "
-                        "Sana verilen metni mutlaka analiz et ve şunları yap: "
-                        "1. Metin bir İslam hadisine benziyorsa, mutlaka 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
-                        "2. Metin hiçbir şekilde bir İslam hadisine benzemiyorsa, 'Bu bir hadis değildir' yaz. "
-                        "Karar verirken metnin bağlamına ve kelime yapısına bak. Tereddüt etmeyip kesin bir karar ver."
+                        "Girilen metni analiz et ve sonuç ver. "
+                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
+                        "2. Eğer metin bir İslam hadisi değilse, 'Bu bir hadis değildir' yaz."
                     ),
                 },
-                {
-                    "role": "user",
-                    "content": f"Metin: {text}",
-                },
+                {"role": "user", "content": f"Metin: {text}"},
             ],
         )
         result = response["choices"][0]["message"]["content"].strip()
@@ -56,7 +52,6 @@ def check_hadis():
 
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
-
 
 # 2. HADİS ANALİZİ
 @app.route("/analyze_hadis", methods=["POST"])
@@ -78,14 +73,10 @@ def analyze_hadis():
                     "content": (
                         "Sen bir İslam hadisi analiz sistemisin. "
                         "Verilen hadisi ve seçilen aksiyonu analiz et. "
-                        "Eğer verilen hadis, sahih kaynaklarda geçen bilgilere uyuyorsa, analiz sonuçlarını açıkla. "
-                        "Analiz yaparken metinle ilgili kapsamlı bilgi ver ve metni açıklığa kavuştur."
+                        "Eğer hadis sahih bir kaynaktan geliyorsa veya detay gerekiyorsa sonuçları açıkla."
                     ),
                 },
-                {
-                    "role": "user",
-                    "content": f"Hadis: {hadis}\nAksiyon: {action}",
-                },
+                {"role": "user", "content": f"Hadis: {hadis}\nAksiyon: {action}"},
             ],
         )
         result = response["choices"][0]["message"]["content"].strip()
@@ -97,5 +88,3 @@ def analyze_hadis():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Render'ın belirlediği PORT'u kullanıyoruz
     app.run(host="0.0.0.0", port=port)
-
-
