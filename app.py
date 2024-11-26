@@ -54,14 +54,13 @@ def check_hadis():
         return jsonify({"error": str(e)}), 500
 
 # 2. HADİS ANALİZİ
-@app.route("/analyze_hadis", methods=["POST"])
-def analyze_hadis():
+@app.route("/check_hadis", methods=["POST"])
+def check_hadis():
     data = request.json
-    hadis = data.get("hadis")
-    action = data.get("action")
+    text = data.get("text")
 
-    if not hadis or not action:
-        return jsonify({"error": "Hadis ve aksiyon boş olamaz"}), 400
+    if not text:
+        return jsonify({"error": "Metin boş olamaz"}), 400
 
     # OpenAI API çağrısı
     try:
@@ -71,19 +70,32 @@ def analyze_hadis():
                 {
                     "role": "system",
                     "content": (
-                        "Sen bir İslam hadisi analiz sistemisin. "
-                        "Verilen hadisi ve seçilen aksiyonu analiz et. "
-                        "Eğer hadis sahih bir kaynaktan geliyorsa veya detay gerekiyorsa sonuçları açıkla."
+                        "Sen bir İslam hadisi doğrulama sistemisin. "
+                        "Sana bir metin verildiğinde şunları yap: "
+                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
+                        "2. Eğer metin bir İslam hadisine benzemiyor ve Kur'an ile uyumsuz ifadeler içeriyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
+                        "3. Eğer metin Kur'an ile uyumluysa ancak hadisle ilgili kesin bir bilgi yoksa, 'Bu metin Kur'an ile uyumlu ancak hadis olup olmadığına dair bir bilgi bulunamadı' yaz. "
+                        "Kur'an'daki ayetlerle metin arasındaki uyumu değerlendir ve metni analiz et."
                     ),
                 },
-                {"role": "user", "content": f"Hadis: {hadis}\nAksiyon: {action}"},
+                {"role": "user", "content": f"Metin: {text}"},
             ],
         )
         result = response["choices"][0]["message"]["content"].strip()
-        return jsonify({"result": result})
+
+        # Yanıtı kontrol et
+        if "Bu yazdığınız şey hadis değil!" in result:
+            return jsonify({"is_hadis": False, "message": result})
+        elif "Bu metin bir hadise benziyor" in result:
+            return jsonify({"is_hadis": True, "message": result})
+        elif "Kur'an ile uyumlu ancak hadis olup olmadığına dair bir bilgi bulunamadı" in result:
+            return jsonify({"is_hadis": None, "message": result})
+        else:
+            return jsonify({"is_hadis": False, "message": "Bir hata oluştu, metin değerlendirilemedi."})
 
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Render'ın belirlediği PORT'u kullanıyoruz
