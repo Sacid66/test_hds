@@ -95,6 +95,7 @@ def analyze_hadis():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))  # Varsayılan olarak 5000 kullanılır
-    app.run(debug=True, host="0.0.0.0", port=port)
+    port = int(os.getenv("PORT", 5000))  # Render'ın belirlediği PORT'u kullanıyoruz
+    app.run(host="0.0.0.0", port=port)
+
 
