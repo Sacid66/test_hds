@@ -16,9 +16,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 def index():
     return render_template("index.html")
 
-# 1. HADİS KONTROLÜ
-@app.route("/check_hadis", methods=["POST"])
-def check_hadis():
+# 1. HADİS KONTROLÜ (Basit doğrulama)
+@app.route("/check_hadis_simple", methods=["POST"])
+def check_hadis_simple():
     data = request.json
     text = data.get("text")
 
@@ -53,9 +53,9 @@ def check_hadis():
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
 
-# 2. HADİS ANALİZİ
-@app.route("/check_hadis", methods=["POST"])
-def check_hadis():
+# 2. HADİS ANALİZİ (Kur'an uyumlu detaylı analiz)
+@app.route("/check_hadis_advanced", methods=["POST"])
+def check_hadis_advanced():
     data = request.json
     text = data.get("text")
 
@@ -70,7 +70,7 @@ def check_hadis():
                 {
                     "role": "system",
                     "content": (
-                        "Sen bir İslam hadisi doğrulama sistemisin. "
+                        "Sen bir İslam hadisi doğrulama ve analiz sistemisin. "
                         "Sana bir metin verildiğinde şunları yap: "
                         "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
                         "2. Eğer metin bir İslam hadisine benzemiyor ve Kur'an ile uyumsuz ifadeler içeriyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
@@ -95,7 +95,6 @@ def check_hadis():
 
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Render'ın belirlediği PORT'u kullanıyoruz
