@@ -24,10 +24,11 @@
   </div>
 
   <script>
-    const BASE_URL = "https://test-hds.onrender.com"; <!-- Render URL'niz -->
+    const BASE_URL = "https://test-hds.onrender.com"; // Render URL'niz
 
     let approvedHadis = "";
 
+    // Onaylama işlemi
     function approveHadis() {
       const hadisInput = document.getElementById("hadis-input").value.trim();
       const statusMessage = document.getElementById("status-message");
@@ -39,19 +40,18 @@
         return;
       }
 
-      fetch(`${BASE_URL}/check_hadis_simple`, { // Simple endpoint için
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: hadisInput }),
-})
-
+      fetch(`${BASE_URL}/check_hadis_simple`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: hadisInput }),
+      })
         .then((response) => response.json())
         .then((data) => {
           if (data.is_hadis) {
             approvedHadis = hadisInput;
-            statusMessage.textContent = "Hadis onaylandı!";
+            statusMessage.textContent = "Bu bir hadis!";
             statusMessage.classList.remove("hidden", "error");
             statusMessage.classList.add("success");
           } else {
@@ -68,6 +68,7 @@
         });
     }
 
+    // Ek bilgi sorgulama (Kur’an’a uygunluk veya kaynak sorma)
     function sendMessage(buttonMessage) {
       if (!approvedHadis) {
         alert("Lütfen önce bir hadis yazıp onaylayınız!");
@@ -81,18 +82,18 @@
       userMessage.textContent = `${approvedHadis} - ${buttonMessage}`;
       messagesContainer.appendChild(userMessage);
 
-      fetch(`${BASE_URL}/analyze_hadis`, {
+      fetch(`${BASE_URL}/check_hadis_advanced`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ hadis: approvedHadis, action: buttonMessage }),
+        body: JSON.stringify({ text: approvedHadis }),
       })
         .then((response) => response.json())
         .then((data) => {
           const apiMessage = document.createElement("div");
           apiMessage.classList.add("message", "api");
-          apiMessage.textContent = data.result;
+          apiMessage.textContent = data.message || "Bir cevap alınamadı.";
           messagesContainer.appendChild(apiMessage);
 
           messagesContainer.scrollTop = messagesContainer.scrollHeight;

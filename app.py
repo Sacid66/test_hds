@@ -35,8 +35,8 @@ def check_hadis_simple():
                     "content": (
                         "Sen bir İslam hadisi doğrulama sistemisin. "
                         "Girilen metni analiz et ve sonuç ver. "
-                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
-                        "2. Eğer metin bir İslam hadisi değilse, 'Bu bir hadis değildir' yaz."
+                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu bir hadis!' yaz. "
+                        "2. Eğer metin bir İslam hadisi değilse, 'Bu yazdığınız şey hadis değil!' yaz."
                     ),
                 },
                 {"role": "user", "content": f"Metin: {text}"},
@@ -45,10 +45,12 @@ def check_hadis_simple():
         result = response["choices"][0]["message"]["content"].strip()
 
         # Yanıtı kontrol et
-        if "Bu bir hadis değildir" in result:
+        if "Bu yazdığınız şey hadis değil!" in result:
             return jsonify({"is_hadis": False, "message": result})
-        else:
+        elif "Bu bir hadis!" in result:
             return jsonify({"is_hadis": True, "message": result})
+        else:
+            return jsonify({"is_hadis": False, "message": "Bir hata oluştu, metin değerlendirilemedi."})
 
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
@@ -72,9 +74,8 @@ def check_hadis_advanced():
                     "content": (
                         "Sen bir İslam hadisi doğrulama ve analiz sistemisin. "
                         "Sana bir metin verildiğinde şunları yap: "
-                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu metin bir hadise benziyor' yaz ve hangi hadise benzediğini açıkla. "
-                        "2. Eğer metin bir İslam hadisine benzemiyor ve Kur'an ile uyumsuz ifadeler içeriyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
-                        "3. Eğer metin Kur'an ile uyumluysa ancak hadisle ilgili kesin bir bilgi yoksa, 'Bu metin Kur'an ile uyumlu ancak hadis olup olmadığına dair bir bilgi bulunamadı' yaz. "
+                        "1. Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile uyumluysa, 'Bu bir hadis!' yaz. "
+                        "2. Eğer metin bir İslam hadisine benzemiyor ve Kur'an ile çelişen ifadeler içeriyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
                         "Kur'an'daki ayetlerle metin arasındaki uyumu değerlendir ve metni analiz et."
                     ),
                 },
@@ -86,10 +87,8 @@ def check_hadis_advanced():
         # Yanıtı kontrol et
         if "Bu yazdığınız şey hadis değil!" in result:
             return jsonify({"is_hadis": False, "message": result})
-        elif "Bu metin bir hadise benziyor" in result:
+        elif "Bu bir hadis!" in result:
             return jsonify({"is_hadis": True, "message": result})
-        elif "Kur'an ile uyumlu ancak hadis olup olmadığına dair bir bilgi bulunamadı" in result:
-            return jsonify({"is_hadis": None, "message": result})
         else:
             return jsonify({"is_hadis": False, "message": "Bir hata oluştu, metin değerlendirilemedi."})
 
