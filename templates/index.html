@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hadis Analiz Sistemi</title>
+  <link rel="stylesheet" href="/static/style.css"> <!-- CSS dosyasını bağladık -->
+</head>
+<body>
+  <div class="container">
+    <h1 id="heading">Hadis Analiz Sistemi</h1>
+    <p id="status-message" class="hidden"></p>
+    <div class="input-section">
+      <input id="hadis-input" type="text" placeholder="Hadis yazınız..." />
+      <button id="approve-button" onclick="approveHadis()">Onayla</button>
+    </div>
+    <div class="button-row">
+      <button onclick="sendMessage('Hadisin sahihliğini kontrol et')">Hadisin Sahihlik Kontrolü</button>
+      <button onclick="sendMessage('Bu hadis Kur’an’a uygun mu?')">Kur’an’a Uygunluk</button>
+      <button onclick="sendMessage('Hadisin bağlamını açıkla')">Bağlam Analizi</button>
+      <button onclick="sendMessage('Bu hadisin kaynağı nedir?')">Kaynak Sor</button>
+    </div>
+    <div id="chat-box">
+      <div id="messages"></div>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = "http://127.0.0.1:5000";
+    let approvedHadis = "";
+
+    function approveHadis() {
+      const hadisInput = document.getElementById("hadis-input").value.trim();
+      const statusMessage = document.getElementById("status-message");
+
+      if (!hadisInput) {
+        statusMessage.textContent = "Lütfen bir hadis yazınız.";
+        statusMessage.classList.remove("hidden", "success");
+        statusMessage.classList.add("error");
+        return;
+      }
+
+      fetch(`${BASE_URL}/check_hadis`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: hadisInput }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.is_hadis) {
+            approvedHadis = hadisInput;
+            statusMessage.textContent = "Hadis onaylandı!";
+            statusMessage.classList.remove("hidden", "error");
+            statusMessage.classList.add("success");
+          } else {
+            statusMessage.textContent = "Bu yazdığınız şey hadis değil!";
+            statusMessage.classList.remove("hidden", "success");
+            statusMessage.classList.add("error");
+          }
+        })
+        .catch((error) => {
+          console.error("Hata:", error);
+          statusMessage.textContent = "Bir hata oluştu!";
+          statusMessage.classList.remove("hidden", "success");
+          statusMessage.classList.add("error");
+        });
+    }
+
+    function sendMessage(buttonMessage) {
+      if (!approvedHadis) {
+        alert("Lütfen önce bir hadis yazıp onaylayınız!");
+        return;
+      }
+
+      const messagesContainer = document.getElementById("messages");
+
+      const userMessage = document.createElement("div");
+      userMessage.classList.add("message", "user");
+      userMessage.textContent = `${approvedHadis} - ${buttonMessage}`;
+      messagesContainer.appendChild(userMessage);
+
+      fetch(`${BASE_URL}/analyze_hadis`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ hadis: approvedHadis, action: buttonMessage }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const apiMessage = document.createElement("div");
+          apiMessage.classList.add("message", "api");
+          apiMessage.textContent = data.result;
+          messagesContainer.appendChild(apiMessage);
+
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        })
+        .catch((error) => {
+          console.error("Hata:", error);
+          const apiMessage = document.createElement("div");
+          apiMessage.classList.add("message", "api");
+          apiMessage.textContent = "API'den cevap alınamadı.";
+          messagesContainer.appendChild(apiMessage);
+        });
+    }
+  </script>
+</body>
+</html>
