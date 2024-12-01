@@ -34,9 +34,9 @@ def check_hadis_simple():
                     "role": "system",
                     "content": (
                         "Sen bir İslam hadisi doğrulama sistemisin. "
-                        "Girilen metni analiz et ve sonuç ver. "
-                        "1. Eğer metin bir İslam hadisine benziyorsa, 'Bu bir hadis!' yaz. "
-                        "2. Eğer metin bir İslam hadisi değilse, 'Bu yazdığınız şey hadis değil!' yaz."
+                        "Girilen metni analiz et ve sadece şu iki sonuçtan birini ver: "
+                        "'Bu bir hadis!' veya 'Bu yazdığınız şey hadis değil!'. "
+                        "Karar verirken Kur'an'daki yaratılış ayetlerini ve İslam Hadis literatürünü dikkate al."
                     ),
                 },
                 {"role": "user", "content": f"Metin: {text}"},
@@ -73,10 +73,11 @@ def check_hadis_advanced():
                     "role": "system",
                     "content": (
                         "Sen bir İslam hadisi doğrulama ve analiz sistemisin. "
-                        "Sana bir metin verildiğinde şunları yap: "
-                        "1. Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile uyumluysa, 'Bu bir hadis!' yaz. "
-                        "2. Eğer metin bir İslam hadisine benzemiyor ve Kur'an ile çelişen ifadeler içeriyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
-                        "Kur'an'daki ayetlerle metin arasındaki uyumu değerlendir ve metni analiz et."
+                        "Girilen metni analiz et ve sadece şu iki sonuçtan birini ver: "
+                        "'Bu bir hadis!' veya 'Bu yazdığınız şey hadis değil!'. "
+                        "Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile çelişmiyorsa, 'Bu bir hadis!' yaz. "
+                        "Eğer metin Kur'an ile çelişen ifadeler içeriyorsa veya bir İslam hadisine benzemiyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
+                        "Karar verirken Kur'an'daki yaratılış ayetlerini ve İslam Hadis literatürünü dikkate al."
                     ),
                 },
                 {"role": "user", "content": f"Metin: {text}"},
