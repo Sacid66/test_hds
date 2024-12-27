@@ -80,6 +80,7 @@ button:hover {
   overflow-y: auto;
   margin: 0 auto;
   text-align: left;
+  border: 1px solid #333;
 }
 
 .messages {
@@ -87,16 +88,17 @@ button:hover {
 }
 
 .fixed-buttons {
-  position: sticky;
+  position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%; /* Chatbox genişliğine uygun */
   background-color: #1e1e1e;
-  padding: 10px;
   display: flex;
   justify-content: space-around;
+  padding: 10px;
   border-top: 1px solid #444;
-  z-index: 10;
+  border-radius: 0 0 10px 10px;
+  box-sizing: border-box;
 }
 
 .message {
