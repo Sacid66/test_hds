@@ -75,47 +75,55 @@
 
     // Ek bilgi sorgulama (Kur’an’a uygunluk veya kaynak sorma)
     function sendMessage(buttonMessage) {
-        if (!approvedHadis) {
-            alert("Lütfen önce bir hadis yazıp onaylayınız!");
-            return;
-        }
+  if (!approvedHadis) {
+    alert("Lütfen önce bir hadis yazıp onaylayınız!");
+    return;
+  }
 
-        const messagesContainer = document.getElementById("messages");
+  const messagesContainer = document.getElementById("messages");
 
-        // Kullanıcı mesajını ekliyoruz
-        const userMessage = document.createElement("div");
-        userMessage.classList.add("message", "user");
-        userMessage.textContent = `${approvedHadis} - ${buttonMessage}`;
-        messagesContainer.appendChild(userMessage);
+  // Kullanıcı mesajını ekliyoruz
+  const userMessage = document.createElement("div");
+  userMessage.classList.add("message", "user");
+  userMessage.textContent = `${approvedHadis} - ${buttonMessage}`;
+  messagesContainer.appendChild(userMessage);
 
-        fetch(`${BASE_URL}/check_hadis_advanced`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ text: approvedHadis }),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("API çağrısı başarısız oldu!");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                const apiMessage = document.createElement("div");
-                apiMessage.classList.add("message", "api");
-                apiMessage.textContent = data.message || "API'den detaylı bilgi alınamadı.";
-                messagesContainer.appendChild(apiMessage);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            })
-            .catch((error) => {
-                console.error("Hata:", error);
-                const apiMessage = document.createElement("div");
-                apiMessage.classList.add("message", "api");
-                apiMessage.textContent = "API'den cevap alınamadı.";
-                messagesContainer.appendChild(apiMessage);
-            });
-    }
+  fetch(`${BASE_URL}/check_hadis_advanced`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: approvedHadis }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("API çağrısı başarısız oldu!");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const apiMessage = document.createElement("div");
+      apiMessage.classList.add("message", "api");
+
+      // "Bu bir hadis!" mesajını detaydan kaldır
+      if (data.message) {
+        apiMessage.textContent = data.message.replace("Bu bir hadis! ", ""); // Başlangıç mesajını kaldır
+      } else {
+        apiMessage.textContent = "API'den bir cevap alınamadı.";
+      }
+
+      messagesContainer.appendChild(apiMessage);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    })
+    .catch((error) => {
+      console.error("Hata:", error);
+      const apiMessage = document.createElement("div");
+      apiMessage.classList.add("message", "api");
+      apiMessage.textContent = "API'den cevap alınamadı.";
+      messagesContainer.appendChild(apiMessage);
+    });
+}
+
 </script>
 
 </body>
