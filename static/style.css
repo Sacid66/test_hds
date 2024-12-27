@@ -97,3 +97,24 @@ button:hover {
   justify-content: space-around;
   border-top: 1px solid #444;
 }
+
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #000000;
+  color: white;
+  margin-left: auto;
+  text-align: right;
+}
+
+.message.api {
+  align-self: flex-start;
+  background-color: #555;
+  color: white;
+}
