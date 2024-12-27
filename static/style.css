@@ -91,11 +91,11 @@ button:hover {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%; /* Chatbox genişliğine uygun */
+  width: calc(100% - 40px); /* Chatbox'ın genişliğine uyacak */
   background-color: #1e1e1e;
   display: flex;
-  justify-content: space-around;
-  padding: 10px;
+  justify-content: space-between;
+  padding: 10px 20px; /* Chatbox içeriğiyle aynı hizayı korumak için */
   border-top: 1px solid #444;
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
