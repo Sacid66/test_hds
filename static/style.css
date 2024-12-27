@@ -1,110 +1,99 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .container {
-    text-align: center;
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  #status-message {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  #status-message.hidden {
-    display: none;
-  }
-  
-  #status-message.error {
-    color: red;
-  }
-  
-  #status-message.success {
-    color: green;
-  }
-  
-  .input-section {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  input {
-    padding: 10px;
-    border-radius: 20px;
-    border: none;
-    width: 300px;
-    background-color: #1e1e1e;
-    color: white;
-    outline: none;
-  }
-  
-  button {
-    background-color: #1e1e1e;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    color: white;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #333;
-  }
-  
-  .button-row {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  #chat-box {
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    padding: 20px;
-    width: 100%;
-    max-width: 600px;
-    height: 300px;
-    overflow-y: auto;
-    margin: 0 auto;
-    text-align: left;
-  }
-  
-  .message {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 70%;
-  }
-  
-  .message.user {
-    align-self: flex-end;
-    background-color: #000000;
-    color: white;
-    margin-left: auto;
-  }
-  
-  .message.api {
-    align-self: flex-start;
-    background-color: #555;
-    color: white;
-  }
-  
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#status-message {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#status-message.hidden {
+  display: none;
+}
+
+#status-message.error {
+  color: red;
+}
+
+#status-message.success {
+  color: green;
+}
+
+.input-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  width: 300px;
+  background-color: #1e1e1e;
+  color: white;
+  outline: none;
+}
+
+button {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #333;
+}
+
+.chat-box {
+  position: relative;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  overflow-y: auto;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.messages {
+  padding-bottom: 60px; /* Buton alanı için boşluk bırak */
+}
+
+.fixed-buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1e1e1e;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #444;
+}
