@@ -103,7 +103,7 @@
           apiMessage.classList.add("message", "api");
           apiMessage.textContent = data.message || "API'den bir cevap alınamadı.";
           messagesContainer.appendChild(apiMessage);
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll bar otomatik aşağı
         })
         .catch((error) => {
           console.error("Hata:", error);
