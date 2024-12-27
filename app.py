@@ -36,7 +36,6 @@ def check_hadis_simple():
                         "Sen bir İslam hadisi doğrulama sistemisin. "
                         "Girilen metni analiz et ve sadece şu iki sonuçtan birini ver: "
                         "'Bu bir hadis!' veya 'Bu yazdığınız şey hadis değil!'. "
-                        "Karar verirken Kur'an'daki yaratılış ayetlerini ve İslam Hadis literatürünü dikkate al."
                     ),
                 },
                 {"role": "user", "content": f"Metin: {text}"},
@@ -73,11 +72,11 @@ def check_hadis_advanced():
                     "role": "system",
                     "content": (
                         "Sen bir İslam hadisi doğrulama ve analiz sistemisin. "
-                        "Girilen metni analiz et ve sadece şu iki sonuçtan birini ver: "
-                        "'Bu bir hadis!' veya 'Bu yazdığınız şey hadis değil!'. "
-                        "Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile çelişmiyorsa, 'Bu bir hadis!' yaz. "
-                        "Eğer metin Kur'an ile çelişen ifadeler içeriyorsa veya bir İslam hadisine benzemiyorsa, 'Bu yazdığınız şey hadis değil!' yaz. "
-                        "Karar verirken Kur'an'daki yaratılış ayetlerini ve İslam Hadis literatürünü dikkate al."
+                        "Girilen metni analiz et ve detaylı bir açıklama yap. "
+                        "Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile çelişmiyorsa, "
+                        "'Bu bir hadis!' yaz ve hangi kaynaklarda geçtiğini belirt. "
+                        "Eğer metin Kur'an ile çelişen ifadeler içeriyorsa veya bir İslam hadisine benzemiyorsa, "
+                        "'Bu yazdığınız şey hadis değil!' yaz ve detaylı açıklama yap."
                     ),
                 },
                 {"role": "user", "content": f"Metin: {text}"},
@@ -85,13 +84,7 @@ def check_hadis_advanced():
         )
         result = response["choices"][0]["message"]["content"].strip()
 
-        # Yanıtı kontrol et
-        if "Bu yazdığınız şey hadis değil!" in result:
-            return jsonify({"is_hadis": False, "message": result})
-        elif "Bu bir hadis!" in result:
-            return jsonify({"is_hadis": True, "message": result})
-        else:
-            return jsonify({"is_hadis": False, "message": "Bir hata oluştu, metin değerlendirilemedi."})
+        return jsonify({"message": result})
 
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
