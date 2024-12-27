@@ -105,12 +105,8 @@
       const apiMessage = document.createElement("div");
       apiMessage.classList.add("message", "api");
 
-      // "Bu bir hadis!" mesajını detaydan kaldır
-      if (data.message) {
-        apiMessage.textContent = data.message.replace("Bu bir hadis! ", ""); // Başlangıç mesajını kaldır
-      } else {
-        apiMessage.textContent = "API'den bir cevap alınamadı.";
-      }
+      // API'den dönen mesajı direkt ekle
+      apiMessage.textContent = data.message || "API'den bir cevap alınamadı.";
 
       messagesContainer.appendChild(apiMessage);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -123,6 +119,7 @@
       messagesContainer.appendChild(apiMessage);
     });
 }
+
 
 </script>
 
