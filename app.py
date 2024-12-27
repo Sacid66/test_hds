@@ -76,7 +76,6 @@ def check_hadis_advanced():
                         "Sen bir İslam hadisi doğrulama ve analiz sistemisin. "
                         "Girilen metni analiz et ve detaylı bir açıklama yap. "
                         "Eğer metin bir İslam hadisine benziyorsa ve Kur'an ile çelişmiyorsa, "
-                        "hangi kaynaklarda geçtiğini belirt. "
                         "Eğer metin Kur'an ile çelişen ifadeler içeriyorsa veya bir İslam hadisine benzemiyorsa, "
                         "detaylı açıklama yap ve kaynaklarla çelişen noktaları vurgula."
                     ),
